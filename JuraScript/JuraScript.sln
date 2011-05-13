@@ -10,6 +10,23 @@ EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "JuraScriptSetup", "..\JuraScriptSetup\JuraScriptSetup.vdproj", "{47EE106D-6B4E-4483-89C6-9BCB026F3354}"
 EndProject
 Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 5
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs28
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = ..\\Jurassic\\Jurassic.csproj
+		SccProjectName1 = ../Jurassic
+		SccLocalPath1 = ..\\Jurassic
+		SccProjectUniqueName2 = ..\\JuraScriptLibrary\\JuraScriptLibrary.csproj
+		SccProjectName2 = ../JuraScriptLibrary
+		SccLocalPath2 = ..\\JuraScriptLibrary
+		SccProjectUniqueName3 = JuraScript.csproj
+		SccLocalPath3 = .
+		SccProjectUniqueName4 = ..\\JuraScriptSetup\\JuraScriptSetup.vdproj
+		SccProjectName4 = ../JuraScriptSetup
+		SccLocalPath4 = ..\\JuraScriptSetup
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
