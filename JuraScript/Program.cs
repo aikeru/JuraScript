@@ -18,8 +18,9 @@ namespace JuraScript
         }
     }
 
-    public class JuraScriptObject
+    public class JuraScriptObject : IJuraScriptHost
     {
+        string[] _Args = null;
         ScriptEngine ScriptEngine = new ScriptEngine();
         public JuraScriptObject()
         {
@@ -28,16 +29,18 @@ namespace JuraScript
 
         private void Initialize()
         {
-            WScriptWrapper wsw = new WScriptWrapper();
+            WScriptWrapper wsw = new WScriptWrapper(_Args, "CODEME_UNKNOWN", this);
+            ScriptEngine.SetGlobalValue("WScript", wsw);
 
             ScriptEngine.SetGlobalValue("ActiveXObject", new ActiveXConstructor(ScriptEngine));
             ScriptEngine.SetGlobalValue("Enumerator", new EnumeratorConstructor(ScriptEngine));
             ScriptEngine.SetGlobalValue("Console", typeof(JSConsole));
-            ScriptEngine.SetGlobalValue("WScript", wsw);
+            
         }
 
         public void StartUp(string[] args)
         {
+            _Args = args;
             if (args.Length > 0)
             {
                 if (args.FirstOrDefault(a => a.ToUpper().StartsWith("/CON")) != null)
@@ -79,6 +82,23 @@ namespace JuraScript
                     }
                 }
             } while (true);
+        }
+
+        public ScriptEngine JurassicEngine {
+            get {
+                return ScriptEngine;
+            }
+            set {
+                ScriptEngine = value;
+            }
+        }
+
+        public void Quit() {
+            Environment.Exit(0);   
+        }
+
+        public void Quit(int errCode) {
+            Environment.Exit(errCode);
         }
     }
 }
