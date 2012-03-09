@@ -94,6 +94,9 @@ namespace JuraScriptLibrary {
         }
 
         private string GetObjectEcho(object txt) {
+            if (txt.GetType() == typeof(String)) {
+                return (String)txt;
+            }
             string objStr = "";
             IEnumerable txtEnum = null;
             if (txt.GetType() == typeof(ArrayInstance)) {
