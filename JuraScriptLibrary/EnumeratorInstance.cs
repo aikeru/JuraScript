@@ -73,10 +73,10 @@ namespace JurassicTest
                 }
                 if (_Enumerator.MoveNext())
                 {
-                    return true;
+                    return false;
                 }
             }
-            return false;
+            return true;
         }
         [JSFunction]
         public object item()

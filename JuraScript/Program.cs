@@ -54,6 +54,11 @@ namespace JuraScript
             }
         }
 
+        public void Execute(string code)
+        {
+            ScriptEngine.Execute(code);
+        }
+
         public void ExecuteCommandline(string[] args)
         {
             ScriptEngine.ExecuteFile(args[0]);
