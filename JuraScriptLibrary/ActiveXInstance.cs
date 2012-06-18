@@ -5,6 +5,9 @@ using System.Text;
 using Jurassic.Library;
 using Jurassic;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
+using JuraScriptLibrary;
 
 namespace JurassicTest
 {
@@ -61,6 +64,26 @@ namespace JurassicTest
 
         private object ActiveXGetValue(string propertyName)
         {
+
+            JuraScriptLibrary.ComReflector.ComReflectedMemberTypes memberType = ComReflector.GetMemberType(ActiveXObjectInstance.ActiveXObject, _PropertyName);
+            if (memberType == ComReflector.ComReflectedMemberTypes.Method)
+            {
+                //Get the property off of the .. method ?? Most likely never happen.
+                var propertyValue = new ActiveXInstance(this.Prototype, ActiveXObjectInstance.ActiveXObject.GetType().InvokeMember(_PropertyName,
+                        BindingFlags.InvokeMethod, null, ActiveXObjectInstance.ActiveXObject, null));
+                return new ActiveXFunction(this.Prototype, propertyValue, propertyName);
+            }
+            else if (memberType != ComReflector.ComReflectedMemberTypes.NOT_FOUND && memberType != ComReflector.ComReflectedMemberTypes.NO_ITYPEINFO)
+            {
+                //Unwrap the ActiveXInstance ActiveX Object, then create a new ActiveXFunction pointing at the new property
+                var propertyValue = new ActiveXInstance(this.Prototype, ActiveXObjectInstance.ActiveXObject.GetType().InvokeMember(_PropertyName,
+                    BindingFlags.GetProperty, null, ActiveXObjectInstance.ActiveXObject, null));
+                return new ActiveXFunction(this.Prototype, propertyValue, propertyName);
+            }
+
+            throw new JavaScriptException(this.Engine, "COMError", "No such property.");
+
+            /* OLD METHOD
             try
             {
                 //Unwrap the ActiveXInstance ActiveX Object, then create a new ActiveXFunction pointing at the new property
@@ -82,7 +105,8 @@ namespace JurassicTest
                     throw new JavaScriptException(Engine, "COMError", ex2.ToString());
                 }
             }
-            return base.GetMissingPropertyValue(propertyName);
+            
+            return base.GetMissingPropertyValue(propertyName); */
         }
 
         protected override object GetMissingPropertyValue(string propertyName)
@@ -102,10 +126,11 @@ namespace JurassicTest
         {
             //return functionName + argumentValues.Length;
             //return "somepropertyok";
+
+            /************** OLD METHOD ****************
             try
             {
                 //unpack it first
-                
                 try
                 {
                     var propertyValue = ActiveXObjectInstance.ActiveXObject.GetType().InvokeMember(_PropertyName,
@@ -134,6 +159,26 @@ namespace JurassicTest
                 throw new JavaScriptException(this.Engine, "COMError", ex.ToString());
             }
             throw new JavaScriptException(this.Engine, "COMError", "No such method.");
+            **********************************************/
+
+            //Is it a property or a method?
+            JuraScriptLibrary.ComReflector.ComReflectedMemberTypes memberType = ComReflector.GetMemberType(ActiveXObjectInstance.ActiveXObject, _PropertyName);
+            if(memberType == ComReflector.ComReflectedMemberTypes.Method) {
+                var memberValue = ActiveXObjectInstance.ActiveXObject.GetType().InvokeMember(_PropertyName,
+                                        BindingFlags.InvokeMethod, null, ActiveXObjectInstance.ActiveXObject, argumentValues);
+                if(memberValue == null) { return null; }
+                return new ActiveXInstance(this.Prototype, memberValue);
+            } else if(memberType != ComReflector.ComReflectedMemberTypes.NOT_FOUND && memberType != ComReflector.ComReflectedMemberTypes.NO_ITYPEINFO) {
+                //Sometimes CallFunction is getting a property
+                //ie: Excel .Cells(x,x) which is an array but is called like a function even in JScript
+                var memberValue = ActiveXObjectInstance.ActiveXObject.GetType().InvokeMember(_PropertyName,
+                            BindingFlags.GetProperty, null, ActiveXObjectInstance.ActiveXObject, null);
+                if (memberValue == null) { return null; }
+                return new ActiveXInstance(this.Prototype,
+                        memberValue.GetType().InvokeMember(functionName, BindingFlags.GetProperty, null, memberValue, argumentValues));
+            }
+
+            throw new JavaScriptException(this.Engine, "COMError", "No such method.");
         }
 
         /// <summary>
@@ -143,6 +188,27 @@ namespace JurassicTest
         [JSFunction(Name = "valueOf")]
         public new ObjectInstance ValueOf()
         {
+
+            JuraScriptLibrary.ComReflector.ComReflectedMemberTypes memberType = ComReflector.GetMemberType(ActiveXObjectInstance.ActiveXObject, _PropertyName);
+            if (memberType == ComReflector.ComReflectedMemberTypes.Method)
+            {
+                //Get the property off of the .. method ?? Most likely never happen.
+                var propertyValue = new ActiveXInstance(this.Prototype, ActiveXObjectInstance.ActiveXObject.GetType().InvokeMember(_PropertyName,
+                        BindingFlags.InvokeMethod, null, ActiveXObjectInstance.ActiveXObject, null));
+                return new ActiveXInstance(this.Prototype, propertyValue);
+            }
+            else if (memberType != ComReflector.ComReflectedMemberTypes.NOT_FOUND && memberType != ComReflector.ComReflectedMemberTypes.NO_ITYPEINFO)
+            {
+                //Unwrap the ActiveXInstance ActiveX Object, then create a new ActiveXFunction pointing at the new property
+                var propertyValue = new ActiveXInstance(this.Prototype, ActiveXObjectInstance.ActiveXObject.GetType().InvokeMember(_PropertyName,
+                    BindingFlags.GetProperty, null, ActiveXObjectInstance.ActiveXObject, null));
+                return new ActiveXInstance(this.Prototype, propertyValue);
+            }
+
+            throw new JavaScriptException(this.Engine, "COMError", "Error evaluating: " + _PropertyName);
+
+
+            /* OLD METHOD
             try
             {
                 var propertyValue = ActiveXObjectInstance.ActiveXObject.GetType().InvokeMember(_PropertyName,
@@ -163,10 +229,30 @@ namespace JurassicTest
                     throw new JavaScriptException(Engine, "COMError", ex2.ToString());
                 }
             }
+             */
         }
 
         protected override void SetMissingPropertyValue(string propertyName, object value, bool throwOnError)
         {
+            JuraScriptLibrary.ComReflector.ComReflectedMemberTypes memberType = ComReflector.GetMemberType(ActiveXObjectInstance.ActiveXObject, propertyName);
+            if (memberType == ComReflector.ComReflectedMemberTypes.Field || memberType == ComReflector.ComReflectedMemberTypes.Property)
+            {
+                if (memberType == ComReflector.ComReflectedMemberTypes.Property)
+                {
+                    ActiveXObjectInstance.ActiveXObject.GetType().InvokeMember(propertyName, BindingFlags.SetProperty, null, ActiveXObjectInstance.ActiveXObject, new object[] { value });
+                }
+                else if (memberType == ComReflector.ComReflectedMemberTypes.Field)
+                {
+                    ActiveXObjectInstance.ActiveXObject.GetType().InvokeMember(propertyName, BindingFlags.SetField, null, ActiveXObjectInstance.ActiveXObject, new object[] { value });
+                }
+            }
+            else
+            {
+                base.SetMissingPropertyValue(propertyName, value, throwOnError);
+            }
+            
+
+            /* OLD METHOD
             try
             {
                 ActiveXObjectInstance.ActiveXObject.GetType().InvokeMember(propertyName,
@@ -176,6 +262,7 @@ namespace JurassicTest
             {
                 base.SetMissingPropertyValue(propertyName, value, throwOnError);
             }
+             */
         }
 
         /// <summary>
@@ -185,7 +272,21 @@ namespace JurassicTest
         [JSFunction(Name = "toString")]
         public string ToStringJS()
         {
-            try
+            JuraScriptLibrary.ComReflector.ComReflectedMemberTypes memberType = ComReflector.GetMemberType(ActiveXObjectInstance.ActiveXObject, _PropertyName);
+            if(memberType == ComReflector.ComReflectedMemberTypes.Property) {
+                var propertyValue = ActiveXObjectInstance.ActiveXObject.GetType().InvokeMember(_PropertyName, BindingFlags.GetProperty, null, ActiveXObjectInstance.ActiveXObject, null);
+                return propertyValue.ToString();
+            } else if(memberType == ComReflector.ComReflectedMemberTypes.Field) {
+                var propertyValue = ActiveXObjectInstance.ActiveXObject.GetType().InvokeMember(_PropertyName, BindingFlags.GetProperty, null, ActiveXObjectInstance.ActiveXObject, null);
+                return propertyValue.ToString();
+            } else if(memberType == ComReflector.ComReflectedMemberTypes.Method) {
+                var propertyValue = ActiveXObjectInstance.ActiveXObject.GetType().InvokeMember(_PropertyName,
+                        BindingFlags.InvokeMethod, null, ActiveXObjectInstance.ActiveXObject, null);
+                    return propertyValue.ToString();
+            }
+            throw new JavaScriptException(Engine, "COMError", "Error evaluating: " + _PropertyName);
+            /* OLD METHOD
+             try
             {
                 var propertyValue = ActiveXObjectInstance.ActiveXObject.GetType().InvokeMember(_PropertyName,
                     BindingFlags.GetProperty, null, ActiveXObjectInstance.ActiveXObject, null);
@@ -205,12 +306,11 @@ namespace JurassicTest
                     throw new JavaScriptException(Engine, "COMError", ex2.ToString());
                 }
             }
+             * */
         }
 
 
     }
-
-
 
     public class ActiveXInstance : ObjectInstance
     {
@@ -289,6 +389,27 @@ namespace JurassicTest
 
         protected override void SetMissingPropertyValue(string propertyName, object value, bool throwOnError)
         {
+            JuraScriptLibrary.ComReflector.ComReflectedMemberTypes memberType = ComReflector.GetMemberType(_ActiveXObject, propertyName);
+            if (memberType == ComReflector.ComReflectedMemberTypes.Field || memberType == ComReflector.ComReflectedMemberTypes.Property)
+            {
+                if (memberType == ComReflector.ComReflectedMemberTypes.Property)
+                {
+                    _ActiveXObject.GetType().InvokeMember(propertyName, BindingFlags.SetProperty, null, _ActiveXObject, new object[] { value });
+                }
+                else if (memberType == ComReflector.ComReflectedMemberTypes.Field)
+                {
+                    _ActiveXObject.GetType().InvokeMember(propertyName, BindingFlags.SetField, null, _ActiveXObject, new object[] { value });
+                }
+            }
+            else
+            {
+                base.SetMissingPropertyValue(propertyName, value, throwOnError);
+            }
+        }
+
+        /* OLD METHOD
+        protected override void SetMissingPropertyValue(string propertyName, object value, bool throwOnError)
+        {
             try
             {
                 _ActiveXObject.GetType().InvokeMember(propertyName,
@@ -299,6 +420,7 @@ namespace JurassicTest
                 base.SetMissingPropertyValue(propertyName, value, throwOnError);
             }
         }
+         */
 
         //private class MyFunction : FunctionInstance
         //{
@@ -329,6 +451,7 @@ namespace JurassicTest
         {
             //return functionName + argumentValues.Length;
             //return "somepropertyok";
+            /* OLD METHOD
             try
             {
                 return _ActiveXObject.GetType().InvokeMember(functionName,
@@ -339,6 +462,30 @@ namespace JurassicTest
                 throw new JavaScriptException(this.Engine, "COMError", ex.ToString());
             }
             throw new JavaScriptException(this.Engine, "COMError", "No such method.");
+            */
+
+
+            //Is it a property or a method?
+            JuraScriptLibrary.ComReflector.ComReflectedMemberTypes memberType = ComReflector.GetMemberType(_ActiveXObject, functionName);
+            if (memberType == ComReflector.ComReflectedMemberTypes.Method)
+            {
+                var memberValue = _ActiveXObject.GetType().InvokeMember(functionName,
+                                        BindingFlags.InvokeMethod, null, _ActiveXObject, argumentValues);
+                if (memberValue == null) { return null; }
+                return new ActiveXInstance(this.Prototype, memberValue);
+            }
+            else if (memberType != ComReflector.ComReflectedMemberTypes.NOT_FOUND && memberType != ComReflector.ComReflectedMemberTypes.NO_ITYPEINFO)
+            {
+                //Sometimes CallFunction is getting a property
+                //ie: Excel .Cells(x,x) which is an array but is called like a function even in JScript
+                var memberValue = _ActiveXObject.GetType().InvokeMember(functionName,
+                            BindingFlags.GetProperty, null, _ActiveXObject, null);
+                if (memberValue == null) { return null; }
+                return new ActiveXInstance(this.Prototype,
+                        memberValue.GetType().InvokeMember(functionName, BindingFlags.GetProperty, null, memberValue, argumentValues));
+            }
+
+            throw new JavaScriptException(this.Engine, "COMError", "No such method.");
         }
 
         /// <summary>
@@ -348,19 +495,42 @@ namespace JurassicTest
         [JSFunction(Name = "toString")]
         public string ToStringJS()
         {
-            //return this.ToString();
-            if (String.IsNullOrEmpty(_ObjectHint))
+            //Does it implement IDispatch ?
+            var idisp = _ActiveXObject as IDispatch;
+
+            if (idisp == null)
             {
                 return _ActiveXObject.ToString();
             }
             else
             {
-                if (_ObjectHint.ToUpper() == "DRIVES")
+                //Does it have a default property? (dispid 0)
+                ComReflector.ComReflectedMemberTypes memberType = ComReflector.ComReflectedMemberTypes.NOT_FOUND;
+                string memberName = ComReflector.DefaultPropertyName(idisp, out memberType);
+                if (memberName != "")
                 {
-                    return _ActiveXObject.GetType().InvokeMember("Path", BindingFlags.GetProperty, null, _ActiveXObject, null).ToString();
+                    return _ActiveXObject.GetType().InvokeMember(memberName, BindingFlags.GetProperty, null, _ActiveXObject, null).ToString();
                 }
-                return _ActiveXObject.ToString();
+                else
+                {
+                    return _ActiveXObject.ToString();
+                }
             }
+
+            //OLD METHOD
+            ////return this.ToString();
+            //if (String.IsNullOrEmpty(_ObjectHint))
+            //{
+            //    return _ActiveXObject.ToString();
+            //}
+            //else
+            //{
+            //    if (_ObjectHint.ToUpper() == "DRIVES")
+            //    {
+            //        return _ActiveXObject.GetType().InvokeMember("Path", BindingFlags.GetProperty, null, _ActiveXObject, null).ToString();
+            //    }
+            //    return _ActiveXObject.ToString();
+            //}
             
         }
 
