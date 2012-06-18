@@ -128,6 +128,21 @@ namespace JuraScript.Tests
 
         }
 
+        [TestMethod]
+        public void COMTest_Excel_ReadWriteCell()
+        {
+            JuraScriptObject jso = new JuraScriptObject();
+            jso.Execute(@"
+                var objExcel = new ActiveXObject(""Excel.Application"");
+                objExcel.Visible = true;
+                objExcel.Workbooks.Add();
+                objExcel.Cells(1,1).Value = ""Test Value"";
+                objExcel.Cells(""A1"").Font.Bold = true;
+                objExcel.Cells(1,1).Font.Size = 24;
+                objExcel.Cells(1,1).Font.ColorIndex = 3;
+                
+            ");
+        }
 
 
         /*
