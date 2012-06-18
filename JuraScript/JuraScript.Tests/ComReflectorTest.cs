@@ -128,6 +128,9 @@ namespace JuraScript.Tests
 
         }
 
+
+
+        /*
         /// <summary>
         ///A test for GetCOMMemberType
         ///</summary>
@@ -205,5 +208,7 @@ namespace JuraScript.Tests
             //Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
+         * 
+         */
     }
 }
