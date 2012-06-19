@@ -20,13 +20,11 @@ namespace JurassicTest
         public ActiveXInstance Construct()
         {
             throw new JavaScriptException(Engine, "COMError", "Must specify a COM type to instantiate.");
-            //return new ActiveXInstance(this.Prototype);
         }
 
         [JSConstructorFunction]
         public ActiveXInstance Construct(string progID)
         {
-            Debug.WriteLine("ActiveXConstructor.Construct(" + progID + ")");
             return new ActiveXInstance(this.Prototype, progID);
         }
 
