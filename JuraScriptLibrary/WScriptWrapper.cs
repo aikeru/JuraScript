@@ -94,6 +94,7 @@ namespace JuraScriptLibrary {
         }
 
         private string GetObjectEcho(object txt) {
+            if (txt == null) { return "null"; }
             if (txt.GetType() == typeof(String)) {
                 return (String)txt;
             }
@@ -114,11 +115,18 @@ namespace JuraScriptLibrary {
             return objStr;
         }
         /// <summary>
-        /// Attempts to mimic the functionality observed in WSH
+        /// Attempts to mimic the functionality observed in WSH. This will be called by a JavaScript function, because Jurassic doesn't like to pass valid arguments (ie: undefined)
         /// </summary>
         /// <param name="txt"></param>
         public void Echo(object txt) {
-            Console.WriteLine(GetObjectEcho(txt));
+            if (txt == Jurassic.Undefined.Value)
+            {
+                Console.WriteLine("");
+            }
+            else
+            {
+                Console.WriteLine(GetObjectEcho(txt));
+            }
         }
 
         public string Read() {

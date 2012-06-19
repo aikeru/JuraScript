@@ -96,7 +96,8 @@ namespace Jurassic.Compiler
                             break;
 
                         case TypeCode.DateTime:
-                        case TypeCode.Object:
+                            //msnead: this was shared with TypeCode.Object, but as I've modified it, I don't want TypeCode.DateTime to
+                            //        accept undefined/null, but I do want TypeCode.Object to.
                             if (input == null || input == Undefined.Value)
                             {
                                 demeritPoints[i] += disqualification;
@@ -105,8 +106,24 @@ namespace Jurassic.Compiler
                             {
                                 if (outputType.IsValueType == true)
                                     demeritPoints[i] += disqualification;
-                            }
+                            } 
                             else if (outputType.IsAssignableFrom(input.GetType()) == false)
+                            {
+                                demeritPoints[i] += disqualification;
+                            }
+                            break;
+                        case TypeCode.Object:
+                            //msnead: I want undefined and null values to be passed (ie: WSH WScript.Echo(undefined); WScript.Echo(null); )
+                            /* if (input == null || input == Undefined.Value)
+                            {
+                                demeritPoints[i] += disqualification;
+                            }
+                            else if (input == Null.Value)
+                            {
+                                if (outputType.IsValueType == true)
+                                    demeritPoints[i] += disqualification;
+                            } 
+                            else */ if (outputType.IsAssignableFrom(input.GetType()) == false)
                             {
                                 demeritPoints[i] += disqualification;
                             }
