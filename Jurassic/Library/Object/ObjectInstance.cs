@@ -11,7 +11,7 @@ namespace Jurassic.Library
     [Serializable]
     public class ObjectInstance
 #if !SILVERLIGHT
-        : System.Runtime.Serialization.IDeserializationCallback
+ : System.Runtime.Serialization.IDeserializationCallback
 #endif
     {
         // The script engine associated with this object.
@@ -305,49 +305,6 @@ namespace Jurassic.Library
             }
         }
 
-        public object InlineGetPropertyValue(string name, out int cachedIndex, out object cacheKey, bool IsFunction)
-        {
-            var propertyInfo = this.schema.GetPropertyIndexAndAttributes(name);
-            if (propertyInfo.Exists == true)
-            {
-                // The property exists; it can be cached as long as it is not an accessor property.
-                if ((propertyInfo.Attributes & (PropertyAttributes.IsAccessorProperty | PropertyAttributes.IsLengthProperty)) != 0)
-                {
-                    // Getters and the length property cannot be cached.
-                    cachedIndex = -1;
-                    cacheKey = null;
-
-                    // Call the getter if there is one.
-                    if (propertyInfo.IsAccessor == true)
-                        return ((PropertyAccessorValue)this.propertyValues[propertyInfo.Index]).GetValue(this);
-
-                    // Otherwise, the property is the "magic" length property.
-                    return ((ArrayInstance)this).Length;
-                }
-
-                // The property can be cached.
-                cachedIndex = propertyInfo.Index;
-                cacheKey = this.InlineCacheKey;
-                return this.propertyValues[cachedIndex];
-            }
-            else
-            {
-                // The property is in the prototype or is non-existent.
-                cachedIndex = -1;
-                cacheKey = null;
-                if (this.Prototype == null)
-                    return GetMissingPropertyValue(name);
-                if (IsFunction)
-                {
-                    return this.Prototype.GetNamedPropertyValue(name, this, true);
-                }
-                else
-                {
-                    return this.Prototype.GetNamedPropertyValue(name, this);
-                }
-            }
-        }
-
         /// <summary>
         /// Sets the value of the given property plus retrieves the information needed to speed up
         /// access to the property in future.  If a property with the given name does not exist, or
@@ -538,17 +495,6 @@ namespace Jurassic.Library
             return this.prototype.GetPropertyValue(index, thisValue);
         }
 
-        public object GetPropertyValue(string propertyName, bool IsFunction)
-        {
-            // Check if the property is an indexed property.
-            uint arrayIndex = ArrayInstance.ParseArrayIndex(propertyName);
-            if (arrayIndex != uint.MaxValue)
-                return GetPropertyValue(arrayIndex);
-
-            // Otherwise, the property is a name.
-            return GetNamedPropertyValue(propertyName, this, true);
-        }
-
         /// <summary>
         /// Gets the value of the property with the given name.
         /// </summary>
@@ -602,49 +548,6 @@ namespace Jurassic.Library
             } while (prototypeObject != null);
 
             // The property doesn't exist.
-            return thisValue.GetMissingPropertyValue(propertyName);
-        }
-
-        private object GetNamedPropertyValue(string propertyName, ObjectInstance thisValue, bool IsFunction)
-        {
-            ObjectInstance prototypeObject = this;
-            do
-            {
-                // Retrieve information about the property.
-                var property = prototypeObject.schema.GetPropertyIndexAndAttributes(propertyName);
-                if (property.Exists == true)
-                {
-                    // The property was found!
-                    object value = prototypeObject.propertyValues[property.Index];
-                    if ((property.Attributes & (PropertyAttributes.IsAccessorProperty | PropertyAttributes.IsLengthProperty)) == 0)
-                        return value;
-
-                    // Call the getter if there is one.
-                    if (property.IsAccessor == true)
-                        return ((PropertyAccessorValue)value).GetValue(thisValue);
-
-                    // Otherwise, the property is the "magic" length property.
-                    return ((ArrayInstance)prototypeObject).Length;
-                }
-
-                // Traverse the prototype chain.
-                prototypeObject = prototypeObject.prototype;
-            } while (prototypeObject != null);
-
-            // The property doesn't exist.
-            //return thisValue.GetMissingPropertyValue(propertyName);
-            if (IsFunction)
-            {
-                return thisValue.GetMissingFunctionValue(thisValue, propertyName);
-            }
-            else
-            {
-                return thisValue.GetMissingPropertyValue(propertyName);
-            }
-        }
-
-        protected virtual object GetMissingFunctionValue(ObjectInstance thisValue, string propertyName)
-        {
             return thisValue.GetMissingPropertyValue(propertyName);
         }
 
@@ -751,11 +654,9 @@ namespace Jurassic.Library
             bool exists = SetPropertyValueIfExists(propertyName, value, throwOnError);
             if (exists == false)
             {
-                // Check for missing property
+                // The property doesn't exist - add it.
+                //AddProperty(propertyName, value, PropertyAttributes.FullAccess, throwOnError);
                 SetMissingPropertyValue(propertyName, value, throwOnError);
-
-                // // The property doesn't exist - add it.
-                // AddProperty(propertyName, value, PropertyAttributes.FullAccess, throwOnError);
             }
         }
 
@@ -764,7 +665,6 @@ namespace Jurassic.Library
             // The property doesn't exist - add it.
             AddProperty(propertyName, value, PropertyAttributes.FullAccess, throwOnError);
         }
-
 
         /// <summary>
         /// Sets the value of the given property.  If a property with the given name exists, but
@@ -852,7 +752,7 @@ namespace Jurassic.Library
             // The property does not exist.
             return false;
         }
-        
+
         /// <summary>
         /// Deletes the property with the given array index.
         /// </summary>
@@ -1098,7 +998,7 @@ namespace Jurassic.Library
         /// <returns> The result of calling the function. </returns>
         public object CallMemberFunction(string functionName, params object[] parameters)
         {
-            var function = GetPropertyValue(functionName, true);
+            var function = GetPropertyValue(functionName);
             if (function == null)
                 throw new JavaScriptException(this.Engine, "TypeError", string.Format("Object {0} has no method '{1}'", this.ToString(), functionName));
             if ((function is FunctionInstance) == false)
@@ -1115,7 +1015,7 @@ namespace Jurassic.Library
         /// <returns> <c>true</c> if the function was called successfully; <c>false</c> otherwise. </returns>
         public bool TryCallMemberFunction(out object result, string functionName, params object[] parameters)
         {
-            var function = GetPropertyValue(functionName, true);
+            var function = GetPropertyValue(functionName);
             if ((function is FunctionInstance) == false)
             {
                 result = null;
@@ -1151,7 +1051,7 @@ namespace Jurassic.Library
                     // Otherwise, return the type name.
                     var constructor = this["constructor"];
                     if (constructor is FunctionInstance)
-                        return string.Format("[{0}]", ((FunctionInstance) constructor).Name);
+                        return string.Format("[{0}]", ((FunctionInstance)constructor).Name);
                     return "<unknown>";
                 }
             }
@@ -1174,7 +1074,7 @@ namespace Jurassic.Library
         /// <returns> <c>true</c> if a property with the given name exists on this object,
         /// <c>false</c> otherwise. </returns>
         /// <remarks> Objects in the prototype chain are not considered. </remarks>
-        [JSFunction(Name = "hasOwnProperty", Flags = JSFunctionFlags.HasEngineParameter | JSFunctionFlags.HasThisObject)]
+        [JSInternalFunction(Name = "hasOwnProperty", Flags = JSFunctionFlags.HasEngineParameter | JSFunctionFlags.HasThisObject)]
         public static bool HasOwnProperty(ScriptEngine engine, object thisObject, string propertyName)
         {
             TypeUtilities.VerifyThisObject(engine, thisObject, "hasOwnProperty");
@@ -1188,7 +1088,7 @@ namespace Jurassic.Library
         /// <param name="obj"> The object to check. </param>
         /// <returns> <c>true</c> if this object is in the prototype chain of the given object;
         /// <c>false</c> otherwise. </returns>
-        [JSFunction(Name = "isPrototypeOf", Flags = JSFunctionFlags.HasEngineParameter | JSFunctionFlags.HasThisObject)]
+        [JSInternalFunction(Name = "isPrototypeOf", Flags = JSFunctionFlags.HasEngineParameter | JSFunctionFlags.HasThisObject)]
         public static bool IsPrototypeOf(ScriptEngine engine, object thisObject, object obj)
         {
             if ((obj is ObjectInstance) == false)
@@ -1213,7 +1113,7 @@ namespace Jurassic.Library
         /// <returns> <c>true</c> if a property with the given name exists on this object and is
         /// enumerable, <c>false</c> otherwise. </returns>
         /// <remarks> Objects in the prototype chain are not considered. </remarks>
-        [JSFunction(Name = "propertyIsEnumerable", Flags = JSFunctionFlags.HasEngineParameter | JSFunctionFlags.HasThisObject)]
+        [JSInternalFunction(Name = "propertyIsEnumerable", Flags = JSFunctionFlags.HasEngineParameter | JSFunctionFlags.HasThisObject)]
         public static bool PropertyIsEnumerable(ScriptEngine engine, object thisObject, string propertyName)
         {
             TypeUtilities.VerifyThisObject(engine, thisObject, "propertyIsEnumerable");
@@ -1225,7 +1125,7 @@ namespace Jurassic.Library
         /// Returns a locale-dependant string representing the current object.
         /// </summary>
         /// <returns> Returns a locale-dependant string representing the current object. </returns>
-        [JSFunction(Name = "toLocaleString")]
+        [JSInternalFunction(Name = "toLocaleString")]
         public string ToLocaleString()
         {
             return TypeConverter.ToString(CallMemberFunction("toString"));
@@ -1235,7 +1135,7 @@ namespace Jurassic.Library
         /// Returns a primitive value associated with the object.
         /// </summary>
         /// <returns> A primitive value associated with the object. </returns>
-        [JSFunction(Name = "valueOf")]
+        [JSInternalFunction(Name = "valueOf")]
         public ObjectInstance ValueOf()
         {
             return this;
@@ -1246,13 +1146,13 @@ namespace Jurassic.Library
         /// </summary>
         /// <param name="thisObject"> The value of the "this" keyword. </param>
         /// <returns> A string representing the current object. </returns>
-        [JSFunction(Name = "toString", Flags = JSFunctionFlags.HasEngineParameter | JSFunctionFlags.HasThisObject)]
+        [JSInternalFunction(Name = "toString", Flags = JSFunctionFlags.HasEngineParameter | JSFunctionFlags.HasThisObject)]
         public static string ToStringJS(ScriptEngine engine, object thisObject)
         {
             if (thisObject == null || thisObject == Undefined.Value)
-                return "[object undefined]";
+                return "[object Undefined]";
             if (thisObject == Null.Value)
-                return "[object null]";
+                return "[object Null]";
             return string.Format("[object {0}]", TypeConverter.ToObject(engine, thisObject).InternalClassName);
         }
 
@@ -1265,11 +1165,13 @@ namespace Jurassic.Library
         {
             public List<JSBinderMethod> Methods;
             public int Length;
+            public PropertyAttributes PropertyAttributes;
         }
 
         /// <summary>
         /// Populates the object with functions by searching a .NET type for methods marked with
-        /// the [JSFunction] attribute.  Should be called only once at startup.
+        /// the [JSFunction] attribute.  Should be called only once at startup.  Also automatically
+        /// populates properties marked with the [JSProperty] attribute.
         /// </summary>
         internal protected void PopulateFunctions()
         {
@@ -1278,20 +1180,33 @@ namespace Jurassic.Library
 
         /// <summary>
         /// Populates the object with functions by searching a .NET type for methods marked with
-        /// the [JSFunction] attribute.  Should be called only once at startup.
+        /// the [JSFunction] attribute.  Should be called only once at startup.  Also automatically
+        /// populates properties marked with the [JSProperty] attribute.
         /// </summary>
         /// <param name="type"> The type to search for methods. </param>
         internal protected void PopulateFunctions(Type type)
         {
+            PopulateFunctions(type, BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly);
+        }
+
+        /// <summary>
+        /// Populates the object with functions by searching a .NET type for methods marked with
+        /// the [JSFunction] attribute.  Should be called only once at startup.  Also automatically
+        /// populates properties marked with the [JSProperty] attribute.
+        /// </summary>
+        /// <param name="type"> The type to search for methods. </param>
+        /// <param name="bindingFlags"> The binding flags to use to search for properties and methods. </param>
+        internal protected void PopulateFunctions(Type type, BindingFlags bindingFlags)
+        {
             if (type == null)
                 type = this.GetType();
-            
+
             // Group the methods on the given type by name.
             var functions = new Dictionary<string, MethodGroup>(20);
-            var methods = type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly);
+            var methods = type.GetMethods(bindingFlags);
             foreach (var method in methods)
             {
-                // Make sure the method has the [JSFunction] attribute.
+                // Make sure the method has the [JSInternalFunction] attribute.
                 var attribute = (JSFunctionAttribute)Attribute.GetCustomAttribute(method, typeof(JSFunctionAttribute));
                 if (attribute == null)
                     continue;
@@ -1299,11 +1214,7 @@ namespace Jurassic.Library
                 // Determine the name of the method.
                 string name;
                 if (attribute.Name != null)
-                {
-                    name = Compiler.Lexer.ResolveIdentifier(this.Engine, attribute.Name);
-                    if (name == null)
-                        throw new InvalidOperationException(string.Format("The name provided to [JSFunction] on {0} is not a valid identifier.", method));
-                }
+                    name = attribute.Name;
                 else
                     name = method.Name;
 
@@ -1317,6 +1228,10 @@ namespace Jurassic.Library
                 else
                     methodGroup = functions[name];
 
+                // Internal functions return nulls as undefined.
+                if (attribute is JSInternalFunctionAttribute)
+                    attribute.Flags |= JSFunctionFlags.ConvertNullReturnValueToUndefined;
+
                 // Add the method to the list.
                 methodGroup.Methods.Add(new JSBinderMethod(method, attribute.Flags));
 
@@ -1328,6 +1243,18 @@ namespace Jurassic.Library
                         throw new InvalidOperationException(string.Format("Inconsistant Length property detected on {0}.", method));
                     methodGroup.Length = attribute.Length;
                 }
+
+                // Check property attributes.
+                var descriptorAttributes = PropertyAttributes.Sealed;
+                if (attribute.IsEnumerable)
+                    descriptorAttributes |= PropertyAttributes.Enumerable;
+                if (attribute.IsConfigurable)
+                    descriptorAttributes |= PropertyAttributes.Configurable;
+                if (attribute.IsWritable)
+                    descriptorAttributes |= PropertyAttributes.Writable;
+                if (methodGroup.Methods.Count > 1 && methodGroup.PropertyAttributes != descriptorAttributes)
+                    throw new InvalidOperationException(string.Format("Inconsistant property attributes detected on {0}.", method));
+                methodGroup.PropertyAttributes = descriptorAttributes;
             }
 
             // Now set the relevant properties on the object.
@@ -1337,7 +1264,50 @@ namespace Jurassic.Library
                 MethodGroup methodGroup = pair.Value;
 
                 // Add the function as a property of the object.
-                this.FastSetProperty(name, new ClrFunction(this.Engine.Function.InstancePrototype, methodGroup.Methods, name, methodGroup.Length), PropertyAttributes.NonEnumerable);
+                this.FastSetProperty(name, new ClrFunction(this.Engine.Function.InstancePrototype, methodGroup.Methods, name, methodGroup.Length), methodGroup.PropertyAttributes);
+            }
+
+            PropertyInfo[] properties = type.GetProperties(bindingFlags);
+            foreach (PropertyInfo prop in properties)
+            {
+                var attribute = Attribute.GetCustomAttribute(prop, typeof(JSPropertyAttribute), false) as JSPropertyAttribute;
+                if (attribute == null)
+                    continue;
+
+                // The property name.
+                string name;
+                if (attribute.Name != null)
+                    name = attribute.Name;
+                else
+                    name = prop.Name;
+
+                // The property getter.
+                ClrFunction getter = null;
+                if (prop.CanRead)
+                {
+                    var getMethod = prop.GetGetMethod(true);
+                    getter = new ClrFunction(engine.Function.InstancePrototype, new JSBinderMethod[] { new JSBinderMethod(getMethod) }, name, 0);
+                }
+
+                // The property setter.
+                ClrFunction setter = null;
+                if (prop.CanWrite)
+                {
+                    var setMethod = prop.GetSetMethod((bindingFlags & BindingFlags.NonPublic) != 0);
+                    if (setMethod != null)
+                        setter = new ClrFunction(engine.Function.InstancePrototype, new JSBinderMethod[] { new JSBinderMethod(setMethod) }, name, 1);
+                }
+
+                // The property attributes.
+                var descriptorAttributes = PropertyAttributes.Sealed;
+                if (attribute.IsEnumerable)
+                    descriptorAttributes |= PropertyAttributes.Enumerable;
+                if (attribute.IsConfigurable)
+                    descriptorAttributes |= PropertyAttributes.Configurable;
+
+                // Define the property.
+                var descriptor = new PropertyDescriptor(getter, setter, descriptorAttributes);
+                this.DefineProperty(name, descriptor, true);
             }
         }
 

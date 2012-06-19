@@ -183,7 +183,7 @@ namespace Jurassic.Library
                 if (double.IsInfinity((double)value) == true || double.IsNaN((double)value))
                     result.Append("null");
                 else
-                    result.Append(((double)value).ToString());
+                    result.Append(NumberFormatter.ToString((double)value, 10, NumberFormatter.Style.Regular));
                 return;
             }
             if (value is int)
@@ -221,12 +221,12 @@ namespace Jurassic.Library
             result.Append('\"');
 
             // Check if there are characters that need to be escaped.
-            // These characters include '\' and any character with an ASCII value less than 32.
+            // These characters include '"', '\' and any character with an ASCII value less than 32.
             bool containsUnsafeCharacters = false;
             for (int i = 0; i < input.Length; i++)
             {
                 char c = input[i];
-                if (c == '\\' || c < 0x20)
+                if (c == '\\' || c == '\"' || c < 0x20)
                 {
                     containsUnsafeCharacters = true;
                     break;
