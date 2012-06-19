@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Jurassic.Library;
 using Jurassic;
+using System.Diagnostics;
 
 namespace JurassicTest
 {
@@ -18,12 +19,14 @@ namespace JurassicTest
         [JSConstructorFunction]
         public ActiveXInstance Construct()
         {
-            return new ActiveXInstance(this.Prototype);
+            throw new JavaScriptException(Engine, "COMError", "Must specify a COM type to instantiate.");
+            //return new ActiveXInstance(this.Prototype);
         }
 
         [JSConstructorFunction]
         public ActiveXInstance Construct(string progID)
         {
+            Debug.WriteLine("ActiveXConstructor.Construct(" + progID + ")");
             return new ActiveXInstance(this.Prototype, progID);
         }
 

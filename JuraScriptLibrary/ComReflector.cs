@@ -17,6 +17,27 @@ namespace JuraScriptLibrary
             Field
         }
 
+        public static object InvokeMember(object comObject, string memberName, object[] arguments, bool set)
+        {
+            ComReflectedMemberTypes memberType = GetMemberType(comObject, memberName);
+            if (memberType == ComReflectedMemberTypes.Field)
+            {
+                return comObject.GetType().InvokeMember(memberName, set ? System.Reflection.BindingFlags.SetField : System.Reflection.BindingFlags.GetField, null, comObject, arguments);
+            }
+            else if (memberType == ComReflectedMemberTypes.Property)
+            {
+                return comObject.GetType().InvokeMember(memberName, set ? System.Reflection.BindingFlags.SetProperty : System.Reflection.BindingFlags.GetProperty, null, comObject, arguments);
+            }
+            else if (memberType == ComReflectedMemberTypes.Method)
+            {
+                return comObject.GetType().InvokeMember(memberName, System.Reflection.BindingFlags.InvokeMethod, null, comObject, arguments);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public static ComReflectedMemberTypes GetCOMMemberType(string memberName, ITypeInfo typeInfo, System.Runtime.InteropServices.ComTypes.TYPEATTR typeAttr)
         {
             ComReflectedMemberTypes returnType = ComReflectedMemberTypes.NOT_FOUND;
@@ -202,6 +223,35 @@ namespace JuraScriptLibrary
             return returnName;
         }
 
+
+        public static string GetCOMObjectTypeName(object comObject)
+        {
+            if (comObject == null) { return ""; }
+            var idisp = comObject as IDispatch;
+            if (idisp == null) { return ""; }
+
+            UInt32 count = 0;
+            idisp.GetTypeInfoCount(ref count);
+            if (count < 1) { return ""; }
+            IntPtr _typeInfo = new IntPtr();
+            idisp.GetTypeInfo(0, 0, ref _typeInfo);
+            if (_typeInfo == IntPtr.Zero)
+            {
+                return "";
+            }
+
+            ITypeInfo typeInfo = (ITypeInfo)Marshal.GetTypedObjectForIUnknown(_typeInfo, typeof(ITypeInfo));
+            Marshal.Release(_typeInfo);
+
+            //AddTypeInfoToDump
+            string typeName = "";
+            string docString = "";
+            int docInt = 0;
+            string helpFile = "";
+            typeInfo.GetDocumentation(-1, out typeName, out docString, out docInt, out helpFile);
+
+            return typeName;
+        }
 
         public static ComReflectedMemberTypes GetMemberType(object comObject, string memberName)
         {
