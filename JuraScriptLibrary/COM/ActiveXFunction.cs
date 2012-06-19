@@ -182,8 +182,6 @@ namespace JuraScriptLibrary.COM
         [JSFunction(Name = "toString")]
         public string ToStringJS()
         {
-            ComReflector.ComReflectedMemberTypes memberType = ComReflector.GetMemberType(ActiveXObjectInstance.ActiveXObject, _PropertyName);
-
             return ComReflector.InvokeMember(ActiveXObjectInstance.ActiveXObject, _PropertyName, null, false).ToString();
         }
 
