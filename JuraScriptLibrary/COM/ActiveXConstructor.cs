@@ -6,7 +6,7 @@ using Jurassic.Library;
 using Jurassic;
 using System.Diagnostics;
 
-namespace JurassicTest
+namespace JuraScriptLibrary.COM
 {
     public class ActiveXConstructor : ClrFunction
     {

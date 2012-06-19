@@ -5,7 +5,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 
-namespace JuraScriptLibrary
+namespace JuraScriptLibrary.COM
 {
     public static class ComReflector
     {
@@ -39,7 +39,7 @@ namespace JuraScriptLibrary
             }
             else
             {
-                return null;
+                throw new Exception("COMError: Error invoking member " + memberName + ": is not a field, property or method and is not supported by this helper method.");
             }
         }
 

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Reflection;
-using JurassicTest;
 using System.Collections;
 using System.Threading;
 using Jurassic.Library;
 using Jurassic;
+using JuraScriptLibrary.COM;
 
 namespace JuraScriptLibrary {
     public interface IJuraScriptHost {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace JuraScriptLibrary
+namespace JuraScriptLibrary.COM
 {
     [ComImport()]
     [Guid("00020400-0000-0000-c000-000000000046")]

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Jurassic;
-using JurassicTest;
 using System.IO;
 using JuraScriptLibrary;
+using JuraScriptLibrary.COM;
 
 namespace JuraScript
 {

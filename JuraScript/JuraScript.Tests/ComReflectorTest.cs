@@ -4,6 +4,8 @@ using System;
 using System.Runtime.InteropServices.ComTypes;
 using System.IO;
 using Jurassic.Library;
+using JuraScriptLibrary;
+using JuraScriptLibrary.COM;
 
 namespace JuraScript.Tests
 {
@@ -145,7 +147,7 @@ namespace JuraScript.Tests
             ");
 
             var objExcel = jso.JurassicEngine.GetGlobalValue("objExcel");
-            object cell = ((JurassicTest.ActiveXInstance)objExcel).ActiveXObject.GetType().InvokeMember("Cells", System.Reflection.BindingFlags.GetProperty, null, ((JurassicTest.ActiveXInstance)objExcel).ActiveXObject, new object[] { 1, 1 });
+            object cell = ((ActiveXInstance)objExcel).ActiveXObject.GetType().InvokeMember("Cells", System.Reflection.BindingFlags.GetProperty, null, ((ActiveXInstance)objExcel).ActiveXObject, new object[] { 1, 1 });
             Assert.AreEqual(cell.GetType().InvokeMember("Value", System.Reflection.BindingFlags.GetProperty, null, cell, null).ToString(), "Test Value");
             object font = cell.GetType().InvokeMember("Font", System.Reflection.BindingFlags.GetProperty, null, cell, null);
             Assert.AreEqual(font.GetType().InvokeMember("Bold", System.Reflection.BindingFlags.GetProperty, null, font, null), true);

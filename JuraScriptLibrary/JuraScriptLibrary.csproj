@@ -44,12 +44,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActiveXConstructor.cs" />
-    <Compile Include="ActiveXInstance.cs" />
-    <Compile Include="ComReflector.cs" />
-    <Compile Include="EnumeratorConstructor.cs" />
-    <Compile Include="EnumeratorInstance.cs" />
-    <Compile Include="IDispatch.cs" />
+    <Compile Include="COM\ActiveXConstructor.cs" />
+    <Compile Include="COM\ActiveXFunction.cs" />
+    <Compile Include="COM\ActiveXInstance.cs" />
+    <Compile Include="COM\ComReflector.cs" />
+    <Compile Include="COM\EnumeratorConstructor.cs" />
+    <Compile Include="COM\EnumeratorInstance.cs" />
+    <Compile Include="COM\IDispatch.cs" />
     <Compile Include="JSConsole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WScriptWrapper.cs" />
