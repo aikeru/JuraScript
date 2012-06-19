@@ -18,14 +18,14 @@ namespace JuraScriptLibrary {
     //IMPLEMENT_OLECREATE(<<class>>, <<external_name>>, 
     //0xf44625ab, 0xbaa, 0x4f5e, 0x96, 0x93, 0x8c, 0xa1, 0xce, 0xc, 0x15, 0x58);
     //LScript was 62416980-8B84-4c51-A09C-AB9623C3CC3E
-    //JuraScript is F44625AB-0BAA-4F5E-9693-8CA1CE0C1558
+    //JuraScript is 9861C2C0-A6ED-4780-88E3-7BCEB0FF17E8
     //LScript ProgId was "LScript"
     //JuraScript ProgId is "JuraScript"
 
     [ClassInterface(ClassInterfaceType.None),
      ComVisible(true),
      //Guid("k"),
-     Guid("F44625AB-0BAA-4F5E-9693-8CA1CE0C1558"), //msnead - 2012 picking this back up put this here for now
+     Guid("9861C2C0-A6ED-4780-88E3-7BCEB0FF17E8"), //msnead - 2012 picking this back up put this here for now
      ProgId("JuraScript")]
     public class Engine : IActiveScript, IActiveScriptParse, IDisposable //, IObjectSafety
         , IJuraScriptHost {
