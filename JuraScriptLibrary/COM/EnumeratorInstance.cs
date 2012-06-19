@@ -70,8 +70,10 @@ namespace JuraScriptLibrary.COM
                 if (_Enumerator.Current != null)
                 {
                     _Stack.Add(_Enumerator.Current);
+                    _Enumerator.MoveNext();
+                    return false;
                 }
-                if (_Enumerator.MoveNext())
+                else if (_Enumerator.MoveNext())
                 {
                     return false;
                 }
@@ -92,8 +94,16 @@ namespace JuraScriptLibrary.COM
                     FirstUseBit = true;
                     _Enumerator.MoveNext();
                 }
-                ActiveXInstance ax = new ActiveXInstance(this.Prototype, _Enumerator.Current);
-                return ax;
+                if (_Enumerator.Current == null)
+                {
+                    //Return undefined to mimic WSH
+                    return Jurassic.Undefined.Value;
+                }
+                else
+                {
+                    ActiveXInstance ax = new ActiveXInstance(this.Prototype, _Enumerator.Current);
+                    return ax;
+                }
             }
         }
         [JSFunction]
