@@ -5,7 +5,7 @@ using System.Text;
 using Jurassic.Library;
 using System.Collections;
 
-namespace JurassicTest
+namespace JuraScriptLibrary.COM
 {
 
     public class EnumeratorInstance : ObjectInstance

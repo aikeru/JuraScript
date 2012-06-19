@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Jurassic;
-using JurassicTest;
 using System.IO;
 using JuraScriptLibrary;
 using System.Threading;
@@ -11,6 +10,8 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Reflection;
 using JuraScript;
+using JuraScriptLibrary.COM;
+using JuraScriptLibrary;
 
 namespace JuraScriptLibrary {
     //// {F44625AB-0BAA-4F5E-9693-8CA1CE0C1558}

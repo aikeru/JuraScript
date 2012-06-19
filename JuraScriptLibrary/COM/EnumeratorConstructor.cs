@@ -5,7 +5,7 @@ using System.Text;
 using Jurassic.Library;
 using Jurassic;
 
-namespace JurassicTest
+namespace JuraScriptLibrary.COM
 {
     public class EnumeratorConstructor : ClrFunction
     {
