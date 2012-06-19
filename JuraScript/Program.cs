@@ -29,6 +29,8 @@ namespace JuraScript
 
         private void Initialize()
         {
+            ScriptEngine.EnableExposedClrTypes = true;
+
             WScriptWrapper wsw = new WScriptWrapper(_Args, "CODEME_UNKNOWN", this);
             ScriptEngine.SetGlobalValue("WScript", wsw);
 

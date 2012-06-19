@@ -178,8 +178,8 @@ namespace Jurassic.Library
         /// g (global search for all occurrences of pattern)
         /// i (ignore case)
         /// m (multiline search)</param>
-        [JSFunction(Deprecated = true, Name = "compile")]
-        public void Compile(string pattern, string flags = null)
+        [JSInternalFunction(Deprecated = true, Name = "compile")]
+        public void Compile(string pattern, [DefaultParameterValue(null)] string flags = null)
         {
 #if !SILVERLIGHT
             this.value = new Regex(pattern, ParseFlags(flags) | RegexOptions.Compiled);
@@ -199,7 +199,7 @@ namespace Jurassic.Library
         /// <param name="input"> The string on which to perform the search. </param>
         /// <returns> <c>true</c> if the regular expression has at least one match in the given
         /// string; <c>false</c> otherwise. </returns>
-        [JSFunction(Name = "test")]
+        [JSInternalFunction(Name = "test")]
         public bool Test(string input)
         {
             // Check if there is a match.
@@ -227,7 +227,7 @@ namespace Jurassic.Library
         /// property contains the position of the matched substring within the complete searched
         /// string. The lastIndex property contains the position following the last character in
         /// the match. </returns>
-        [JSFunction(Name = "exec")]
+        [JSInternalFunction(Name = "exec")]
         public object Exec(string input)
         {
             // Perform the regular expression matching.
@@ -418,7 +418,7 @@ namespace Jurassic.Library
                 }
                 parameters[match.Groups.Count] = match.Index;
                 parameters[match.Groups.Count + 1] = input;
-                return TypeConverter.ToString(replaceFunction.CallLateBound(this.Engine.Global, parameters));
+                return TypeConverter.ToString(replaceFunction.CallLateBound(null, parameters));
             }, this.Global == true ? int.MaxValue : 1);
         }
 
@@ -449,7 +449,7 @@ namespace Jurassic.Library
         /// <param name="input"> The string to split. </param>
         /// <param name="limit"> The maximum number of array items to return.  Defaults to unlimited. </param>
         /// <returns> An array containing the split strings. </returns>
-        public ArrayInstance Split(string input, uint limit = uint.MaxValue)
+        public ArrayInstance Split(string input, [DefaultParameterValue(uint.MaxValue)] uint limit = uint.MaxValue)
         {
             // Return an empty array if limit = 0.
             if (limit == 0)
@@ -507,7 +507,7 @@ namespace Jurassic.Library
         /// Returns a string representing the current object.
         /// </summary>
         /// <returns> A string representing the current object. </returns>
-        [JSFunction(Name = "toString")]
+        [JSInternalFunction(Name = "toString")]
         public new string ToString()
         {
             return string.Format("/{0}/{1}", this.Source, this.Flags);
