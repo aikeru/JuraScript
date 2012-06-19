@@ -134,14 +134,37 @@ namespace JuraScript.Tests
             JuraScriptObject jso = new JuraScriptObject();
             jso.Execute(@"
                 var objExcel = new ActiveXObject(""Excel.Application"");
-                objExcel.Visible = true;
+                objExcel.DisplayAlerts = false;
+                //objExcel.Visible = true;
                 objExcel.Workbooks.Add();
                 objExcel.Cells(1,1).Value = ""Test Value"";
-                objExcel.Cells(""A1"").Font.Bold = true;
+                objExcel.Cells(1,1).Font.Bold = true;
                 objExcel.Cells(1,1).Font.Size = 24;
                 objExcel.Cells(1,1).Font.ColorIndex = 3;
                 
             ");
+
+            var objExcel = jso.JurassicEngine.GetGlobalValue("objExcel");
+            object cell = ((JurassicTest.ActiveXInstance)objExcel).ActiveXObject.GetType().InvokeMember("Cells", System.Reflection.BindingFlags.GetProperty, null, ((JurassicTest.ActiveXInstance)objExcel).ActiveXObject, new object[] { 1, 1 });
+            Assert.AreEqual(cell.GetType().InvokeMember("Value", System.Reflection.BindingFlags.GetProperty, null, cell, null).ToString(), "Test Value");
+            object font = cell.GetType().InvokeMember("Font", System.Reflection.BindingFlags.GetProperty, null, cell, null);
+            Assert.AreEqual(font.GetType().InvokeMember("Bold", System.Reflection.BindingFlags.GetProperty, null, font, null), true);
+
+            jso.Execute("objExcel.Quit(); objExcel = null;");
+        }
+
+        [TestMethod]
+        public void COMTest_Msxml2_XMLHTTP()
+        {
+            JuraScriptObject jso = new JuraScriptObject();
+            jso.Execute(@"
+                var ajax = new ActiveXObject(""Msxml2.XMLHTTP"");
+                ajax.Open(""GET"", ""http://jquery-for-admins.googlecode.com/svn/trunk/jq4a.js"", false);
+                ajax.Send();
+                var responseText = ajax.responseText;                
+            ");
+            Assert.IsTrue(jso.JurassicEngine.GetGlobalValue("responseText").ToString().StartsWith("/*!"));
+
         }
 
 
