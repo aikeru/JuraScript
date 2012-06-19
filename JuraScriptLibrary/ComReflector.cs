@@ -20,6 +20,11 @@ namespace JuraScriptLibrary
         public static object InvokeMember(object comObject, string memberName, object[] arguments, bool set)
         {
             ComReflectedMemberTypes memberType = GetMemberType(comObject, memberName);
+            return InvokeMember(comObject, memberName, arguments, set, memberType);
+        }
+
+        public static object InvokeMember(object comObject, string memberName, object[] arguments, bool set, ComReflectedMemberTypes memberType)
+        {
             if (memberType == ComReflectedMemberTypes.Field)
             {
                 return comObject.GetType().InvokeMember(memberName, set ? System.Reflection.BindingFlags.SetField : System.Reflection.BindingFlags.GetField, null, comObject, arguments);
