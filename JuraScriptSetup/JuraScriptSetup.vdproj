@@ -15,8 +15,14 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_41CF1DFA2DA5332628B8D649E5A4E985"
+        "MsmKey" = "8:_0B2F78394979A35386673888DFDA1141"
         "OwnerKey" = "8:_9C9F22C60868477AAE6344C9DB1B14EE"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_0B2F78394979A35386673888DFDA1141"
+        "OwnerKey" = "8:_DB84A13AB8B385AE86D844309FA051B4"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -33,13 +39,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_ACF2309E762CB836C8A6C830D5C546D0"
-        "OwnerKey" = "8:_41CF1DFA2DA5332628B8D649E5A4E985"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_ACF2309E762CB836C8A6C830D5C546D0"
+        "MsmKey" = "8:_DB84A13AB8B385AE86D844309FA051B4"
         "OwnerKey" = "8:_9C9F22C60868477AAE6344C9DB1B14EE"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -52,13 +52,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_41CF1DFA2DA5332628B8D649E5A4E985"
+        "OwnerKey" = "8:_DB84A13AB8B385AE86D844309FA051B4"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_ACF2309E762CB836C8A6C830D5C546D0"
+        "OwnerKey" = "8:_0B2F78394979A35386673888DFDA1141"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -86,6 +86,19 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
             }
         }
         "Release"
@@ -110,6 +123,19 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
             }
         }
     }
@@ -196,20 +222,20 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_41CF1DFA2DA5332628B8D649E5A4E985"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_0B2F78394979A35386673888DFDA1141"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:JuraScriptLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Jurassic, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_41CF1DFA2DA5332628B8D649E5A4E985"
+                    "_0B2F78394979A35386673888DFDA1141"
                     {
-                    "Name" = "8:JuraScriptLibrary.dll"
+                    "Name" = "8:Jurassic.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:JuraScriptLibrary.dll"
+            "SourcePath" = "8:Jurassic.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_4E0E64CD8E31448EA779608FA4AE588C"
@@ -247,20 +273,20 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_ACF2309E762CB836C8A6C830D5C546D0"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_DB84A13AB8B385AE86D844309FA051B4"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Jurassic, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:JuraScriptLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_ACF2309E762CB836C8A6C830D5C546D0"
+                    "_DB84A13AB8B385AE86D844309FA051B4"
                     {
-                    "Name" = "8:Jurassic.dll"
+                    "Name" = "8:JuraScriptLibrary.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:Jurassic.dll"
+            "SourcePath" = "8:JuraScriptLibrary.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_4E0E64CD8E31448EA779608FA4AE588C"
@@ -369,7 +395,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:JuraScript"
         "ProductCode" = "8:{EC79869F-D9D0-4A06-968C-418A582E173A}"
-        "PackageCode" = "8:{B55C6A9D-DFF0-44A0-A3A2-68D1C004918D}"
+        "PackageCode" = "8:{4AC055D8-A7F6-4923-8283-7D7F4C8B9B8A}"
         "UpgradeCode" = "8:{95A9992D-B490-407F-B96A-F82C73FFA8F3}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

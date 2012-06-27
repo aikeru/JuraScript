@@ -6,6 +6,7 @@ using Jurassic;
 using System.IO;
 using JuraScriptLibrary;
 using JuraScriptLibrary.COM;
+using JuraScriptLibrary.Require;
 
 namespace JuraScript
 {
@@ -37,6 +38,8 @@ namespace JuraScript
             ScriptEngine.SetGlobalValue("ActiveXObject", new ActiveXConstructor(ScriptEngine));
             ScriptEngine.SetGlobalValue("Enumerator", new EnumeratorConstructor(ScriptEngine));
             ScriptEngine.SetGlobalValue("Console", typeof(JSConsole));
+            ScriptEngine.SetGlobalValue("require", new requireObject(JurassicEngine.Object.InstancePrototype));
+
             
         }
 
