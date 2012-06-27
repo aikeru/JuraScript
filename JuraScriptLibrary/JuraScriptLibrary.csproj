@@ -52,6 +52,7 @@
     <Compile Include="COM\EnumeratorInstance.cs" />
     <Compile Include="COM\IDispatch.cs" />
     <Compile Include="JSConsole.cs" />
+    <Compile Include="JuraScriptObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Require\exportsObject.cs" />
     <Compile Include="Require\requireObject.cs" />

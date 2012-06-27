@@ -300,7 +300,7 @@ namespace JuraScriptLibrary {
     }
 
 
-    public class JuraScriptObject : IJuraScriptHost {
+    /*public class JuraScriptObject : IJuraScriptHost {
         ScriptEngine ScriptEngine = new ScriptEngine();
 
         public ScriptEngine JurassicEngine {
@@ -341,5 +341,5 @@ namespace JuraScriptLibrary {
         }
 
         #endregion
-    }
+    }*/
 }

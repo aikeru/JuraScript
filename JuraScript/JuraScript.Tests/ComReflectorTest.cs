@@ -137,7 +137,7 @@ namespace JuraScript.Tests
             jso.Execute(@"
                 var objExcel = new ActiveXObject(""Excel.Application"");
                 objExcel.DisplayAlerts = false;
-                //objExcel.Visible = true;
+                objExcel.Visible = true;
                 objExcel.Workbooks.Add();
                 objExcel.Cells(1,1).Value = ""Test Value"";
                 objExcel.Cells(1,1).Font.Bold = true;
