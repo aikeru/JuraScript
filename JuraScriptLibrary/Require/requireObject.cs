@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Jurassic.Library;
 using Jurassic;
+using System.IO;
 
 namespace JuraScriptLibrary.Require
 {
@@ -16,17 +17,28 @@ namespace JuraScriptLibrary.Require
         public override object CallLateBound(object thisObject, params object[] argumentValues)
         {
             if (argumentValues != null
-                && argumentValues.Length > 0)
+                && argumentValues.Length > 0
+                && argumentValues[0] != null
+                && argumentValues[0].GetType() == typeof(String)
+                && !String.IsNullOrWhiteSpace(argumentValues[0].ToString()))
             {
-                var mod = argumentValues[0];
-                if (mod.GetType() == typeof(String))
+                string mod = argumentValues[0].ToString();
+                if (File.Exists(mod + ".jur"))
                 {
-                    //Find module
-
+                    mod = mod + ".jur";
                 }
-                Console.WriteLine("TYPE OF ARGUMENT: " + mod.GetType());
-                Console.WriteLine(mod as ArrayInstance != null ? "It's an array" : "It's not an array");
-                Console.WriteLine(mod as StringInstance != null ? "It's a string" : "It's not a string");
+                
+                if (!mod.ToUpper().EndsWith(".JUR"))
+                {
+                    if (File.Exists(mod + ".jur")) { mod = mod + ".jur"; }
+                }
+
+                JuraScriptObject jso = new JuraScriptObject();
+                jso.ExecuteCommandline(new string[] { mod });
+
+                return jso.Exports;    
+            } else {
+                throw new JavaScriptException(this.Engine, "Invalid argument", "Must pass a string to 'require()'.");
             }
             return null;
         }
