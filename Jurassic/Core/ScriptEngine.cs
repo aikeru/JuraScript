@@ -11,7 +11,7 @@ namespace Jurassic
     [Serializable]
     public sealed class ScriptEngine
 #if !SILVERLIGHT
-        : System.Runtime.Serialization.ISerializable
+ : System.Runtime.Serialization.ISerializable
 #endif
     {
         // Compatibility mode.
@@ -496,12 +496,11 @@ namespace Jurassic
             set;
         }
 
+#if !WINDOWS_PHONE
         internal class ReflectionEmitModuleInfo
         {
-#if !WINDOWS_PHONE
             public System.Reflection.Emit.AssemblyBuilder AssemblyBuilder;
             public System.Reflection.Emit.ModuleBuilder ModuleBuilder;
-#endif //!WINDOWS_PHONE
             public int TypeCount;
         }
 
@@ -510,6 +509,7 @@ namespace Jurassic
         /// </summary>
         [NonSerialized]
         internal ReflectionEmitModuleInfo ReflectionEmitInfo;
+#endif //!WINDOWS_PHONE
 
 
 
@@ -553,7 +553,7 @@ namespace Jurassic
                 source,                             // The source code.
                 CreateOptions(),                    // The compiler options.
                 this.Global);                       // The value of the "this" keyword.
-            
+
             // Parse
             if (this.ParsingStarted != null)
                 this.ParsingStarted(this, EventArgs.Empty);
