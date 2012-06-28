@@ -21,7 +21,8 @@ namespace JuraScript.Tests
             File.WriteAllText("mymodule.jur", "exports.sayhello = function() { return \"hello from mymodule\"; };");
             File.WriteAllText("mymodule2.jur", "exports.sayhello = function() { return \"hello from other module\"; };");
             File.WriteAllText("mymodule3.jur", "exports.someProperty = \"property1\"; var myGlobal = \"globalvalue\"; exports.getGlobal = function() { return myGlobal; };");
-            
+            File.WriteAllText("mymodule4.jur", "exports = function() { return \"output\"; }");
+
         }
 
 
@@ -45,6 +46,10 @@ namespace JuraScript.Tests
             Assert.AreEqual("globalvalue", jso.JurassicEngine.GetGlobalValue("modResultGlobal"));
             Assert.AreEqual("property1", jso.JurassicEngine.GetGlobalValue("modResult3"));
 
+            //Test assigning value to the exports object itself ...
+            jso.Execute(@"var modResult4 = require(""mymodule4.jur"")();");
+
+            Assert.AreEqual("output", jso.JurassicEngine.GetGlobalValue("modResult4"));
         }
     }
 }
