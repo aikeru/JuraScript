@@ -11,7 +11,20 @@ namespace JuraScriptLibrary
 {
     public class JuraScriptObject : IJuraScriptHost
     {
-        public exportsObject Exports { get; set; }
+        /// <summary>
+        /// Get or set the global JavaScript variable 'exports'
+        /// </summary>
+        public object Exports
+        {
+            get
+            {
+                return ScriptEngine.GetGlobalValue("exports");
+            }
+            set
+            {
+                ScriptEngine.SetGlobalValue("exports", value);
+            }
+        }
         string[] _Args = null;
         ScriptEngine ScriptEngine = new ScriptEngine();
         public JuraScriptObject()
@@ -22,7 +35,6 @@ namespace JuraScriptLibrary
         private void Initialize()
         {
             ScriptEngine.EnableExposedClrTypes = true;
-            Exports = new exportsObject(JurassicEngine.Object.InstancePrototype);
             WScriptWrapper wsw = new WScriptWrapper(_Args, "CODEME_UNKNOWN", this);
             ScriptEngine.SetGlobalValue("WScript", wsw);
 
@@ -30,7 +42,7 @@ namespace JuraScriptLibrary
             ScriptEngine.SetGlobalValue("Enumerator", new EnumeratorConstructor(ScriptEngine));
             ScriptEngine.SetGlobalValue("Console", typeof(JSConsole));
             ScriptEngine.SetGlobalValue("require", new requireObject(JurassicEngine.Object.InstancePrototype));
-            ScriptEngine.SetGlobalValue("exports", Exports);
+            ScriptEngine.SetGlobalValue("exports", new exportsObject(JurassicEngine.Object.InstancePrototype));
 
 
         }

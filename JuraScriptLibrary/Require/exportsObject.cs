@@ -7,7 +7,7 @@ using Jurassic;
 
 namespace JuraScriptLibrary.Require
 {
-    public class exportsObject : ObjectInstance
+    public class exportsObject : FunctionInstance
     {
         public Dictionary<string, object> ExportProperties = new Dictionary<string, object>();
 
@@ -39,5 +39,10 @@ namespace JuraScriptLibrary.Require
                 ExportProperties.Add(propertyName, value);
             }
         }
+        public override object CallLateBound(object thisObject, params object[] argumentValues)
+        {
+            return Undefined.Value;
+        }
+        
     }
 }
