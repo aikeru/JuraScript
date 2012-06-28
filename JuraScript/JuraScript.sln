@@ -18,9 +18,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JuraScript.CommonJS.Tests", "JuraScript.CommonJS.Tests\JuraScript.CommonJS.Tests.csproj", "{25E07878-D074-49F0-B730-8849211E772A}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 6
+		SccNumberOfProjects = 7
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs28
 		SccLocalPath0 = .
@@ -38,6 +40,9 @@ Global
 		SccProjectUniqueName5 = JuraScript.Tests\\JuraScript.Tests.csproj
 		SccProjectName5 = JuraScript.Tests
 		SccLocalPath5 = JuraScript.Tests
+		SccProjectUniqueName6 = JuraScript.CommonJS.Tests\\JuraScript.CommonJS.Tests.csproj
+		SccProjectName6 = JuraScript.CommonJS.Tests
+		SccLocalPath6 = JuraScript.CommonJS.Tests
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = JuraScript.vsmdi
@@ -103,6 +108,16 @@ Global
 		{3F8ACFD5-6A5B-4558-8E6A-115914DD451E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{3F8ACFD5-6A5B-4558-8E6A-115914DD451E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{3F8ACFD5-6A5B-4558-8E6A-115914DD451E}.Release|x86.ActiveCfg = Release|Any CPU
+		{25E07878-D074-49F0-B730-8849211E772A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25E07878-D074-49F0-B730-8849211E772A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25E07878-D074-49F0-B730-8849211E772A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{25E07878-D074-49F0-B730-8849211E772A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{25E07878-D074-49F0-B730-8849211E772A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{25E07878-D074-49F0-B730-8849211E772A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25E07878-D074-49F0-B730-8849211E772A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25E07878-D074-49F0-B730-8849211E772A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{25E07878-D074-49F0-B730-8849211E772A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{25E07878-D074-49F0-B730-8849211E772A}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -50,6 +50,10 @@ namespace JuraScript.Tests
             jso.Execute(@"var modResult4 = require(""mymodule4.jur"")();");
 
             Assert.AreEqual("output", jso.JurassicEngine.GetGlobalValue("modResult4"));
+            
+            //Test loading a built-in module
+            jso.Execute(@"var modResult5 = require(""assert"");");
+            
         }
     }
 }

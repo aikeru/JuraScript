@@ -6,6 +6,7 @@ using Jurassic;
 using JuraScriptLibrary.Require;
 using JuraScriptLibrary.COM;
 using System.IO;
+using Jurassic.Library;
 
 namespace JuraScriptLibrary
 {
@@ -43,7 +44,7 @@ namespace JuraScriptLibrary
             ScriptEngine.SetGlobalValue("Console", typeof(JSConsole));
             ScriptEngine.SetGlobalValue("require", new requireObject(JurassicEngine.Object.InstancePrototype));
             ScriptEngine.SetGlobalValue("exports", new exportsObject(JurassicEngine.Object.InstancePrototype));
-
+            
 
         }
 

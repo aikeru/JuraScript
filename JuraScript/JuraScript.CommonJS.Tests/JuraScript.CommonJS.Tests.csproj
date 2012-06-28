@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{25E07878-D074-49F0-B730-8849211E772A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>JuraScript.CommonJS.Tests</RootNamespace>
+    <AssemblyName>JuraScript.CommonJS.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDependentAssemblyPaths Condition=" '$(VS100COMNTOOLS)' != '' " Include="$(VS100COMNTOOLS)..\IDE\PrivateAssemblies">
+      <Visible>False</Visible>
+    </CodeAnalysisDependentAssemblyPaths>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="requireObjectTest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\JuraScriptLibrary\JuraScriptLibrary.csproj">
+      <Project>{6DC8C5C9-BF2E-470A-91AC-6B5D629D281E}</Project>
+      <Name>JuraScriptLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Jurassic\Jurassic.csproj">
+      <Project>{2CE5502D-8710-4BE3-9D90-201D526904B3}</Project>
+      <Name>Jurassic</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="commonjs\.gitignore" />
+    <None Include="commonjs\bootstrap.py" />
+    <None Include="commonjs\docs\contributors.html.markdown" />
+    <None Include="commonjs\docs\history.html.markdown" />
+    <None Include="commonjs\docs\impl\flusspferd.html.markdown" />
+    <None Include="commonjs\docs\impl\gpsee.html.markdown" />
+    <None Include="commonjs\docs\impl\helma.html.markdown" />
+    <None Include="commonjs\docs\impl\index.html.markdown" />
+    <None Include="commonjs\docs\impl\narwhal.html.markdown" />
+    <None Include="commonjs\docs\impl\persevere.html.markdown" />
+    <None Include="commonjs\docs\impl\v8cgi.html.markdown" />
+    <None Include="commonjs\docs\index.html.markdown" />
+    <None Include="commonjs\docs\interp\jsc.html.markdown" />
+    <None Include="commonjs\docs\interp\mozilla.html.markdown" />
+    <None Include="commonjs\docs\interp\rhino.html.markdown" />
+    <None Include="commonjs\docs\interp\spidermonkey.html.markdown" />
+    <None Include="commonjs\docs\interp\v8.html.markdown" />
+    <None Include="commonjs\docs\license.html.markdown" />
+    <None Include="commonjs\docs\process.html.markdown" />
+    <None Include="commonjs\docs\specs\0.1.html.markdown" />
+    <None Include="commonjs\docs\specs\0.5.html.markdown" />
+    <None Include="commonjs\docs\specs\modules\1.0.html.markdown" />
+    <None Include="commonjs\docs\_hooks\extend_md.py" />
+    <None Include="commonjs\docs\_hooks\transformers.py" />
+    <None Include="commonjs\pavement.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="commonjs\docs\css\colorful.css" />
+    <Content Include="commonjs\docs\css\default.css" />
+    <Content Include="commonjs\docs\css\styles.css" />
+    <Content Include="commonjs\docs\images\banner_blue.jpg" />
+    <Content Include="commonjs\docs\images\banner_gray.jpg" />
+    <Content Include="commonjs\docs\images\banner_green.jpg" />
+    <Content Include="commonjs\docs\images\banner_home.jpg" />
+    <Content Include="commonjs\docs\images\banner_orange.jpg" />
+    <Content Include="commonjs\docs\images\banner_red.jpg" />
+    <Content Include="commonjs\docs\images\content-wrapper_bg.png" />
+    <Content Include="commonjs\docs\images\content_bg.png" />
+    <Content Include="commonjs\docs\images\explosion.jpg" />
+    <Content Include="commonjs\docs\images\header_gradient.jpg" />
+    <Content Include="commonjs\docs\images\header_wrapper_bg.png" />
+    <Content Include="commonjs\docs\images\logo.png" />
+    <Content Include="commonjs\docs\images\nav_browsers.png" />
+    <Content Include="commonjs\docs\images\nav_browsers_on.png" />
+    <Content Include="commonjs\docs\images\nav_commonjs.png" />
+    <Content Include="commonjs\docs\images\nav_commonjs_on.png" />
+    <Content Include="commonjs\docs\images\nav_div.png" />
+    <Content Include="commonjs\docs\images\nav_js.png" />
+    <Content Include="commonjs\docs\images\nav_js_on.png" />
+    <Content Include="commonjs\docs\images\news_bg-btm.png" />
+    <Content Include="commonjs\docs\images\news_bg-top.png" />
+    <Content Include="commonjs\docs\_layout\default.html" />
+    <Content Include="commonjs\README.txt" />
+    <Content Include="commonjs\requirements.txt" />
+    <Content Include="commonjs\tests\modules\1.0\absolute\b.js" />
+    <Content Include="commonjs\tests\modules\1.0\absolute\program.js" />
+    <Content Include="commonjs\tests\modules\1.0\absolute\submodule\a.js" />
+    <Content Include="commonjs\tests\modules\1.0\absolute\test.js" />
+    <Content Include="commonjs\tests\modules\1.0\cyclic\a.js" />
+    <Content Include="commonjs\tests\modules\1.0\cyclic\b.js" />
+    <Content Include="commonjs\tests\modules\1.0\cyclic\program.js" />
+    <Content Include="commonjs\tests\modules\1.0\cyclic\test.js" />
+    <Content Include="commonjs\tests\modules\1.0\determinism\program.js" />
+    <Content Include="commonjs\tests\modules\1.0\determinism\submodule\a.js" />
+    <Content Include="commonjs\tests\modules\1.0\determinism\submodule\b.js" />
+    <Content Include="commonjs\tests\modules\1.0\determinism\test.js" />
+    <Content Include="commonjs\tests\modules\1.0\exactExports\a.js" />
+    <Content Include="commonjs\tests\modules\1.0\exactExports\program.js" />
+    <Content Include="commonjs\tests\modules\1.0\exactExports\test.js" />
+    <Content Include="commonjs\tests\modules\1.0\hasOwnProperty\hasOwnProperty.js" />
+    <Content Include="commonjs\tests\modules\1.0\hasOwnProperty\program.js" />
+    <Content Include="commonjs\tests\modules\1.0\hasOwnProperty\test.js" />
+    <Content Include="commonjs\tests\modules\1.0\hasOwnProperty\toString.js" />
+    <Content Include="commonjs\tests\modules\1.0\method\a.js" />
+    <Content Include="commonjs\tests\modules\1.0\method\program.js" />
+    <Content Include="commonjs\tests\modules\1.0\method\test.js" />
+    <Content Include="commonjs\tests\modules\1.0\missing\program.js" />
+    <Content Include="commonjs\tests\modules\1.0\missing\test.js" />
+    <Content Include="commonjs\tests\modules\1.0\monkeys\a.js" />
+    <Content Include="commonjs\tests\modules\1.0\monkeys\program.js" />
+    <Content Include="commonjs\tests\modules\1.0\monkeys\test.js" />
+    <Content Include="commonjs\tests\modules\1.0\nested\a\b\c\d.js" />
+    <Content Include="commonjs\tests\modules\1.0\nested\program.js" />
+    <Content Include="commonjs\tests\modules\1.0\nested\test.js" />
+    <Content Include="commonjs\tests\modules\1.0\relative\program.js" />
+    <Content Include="commonjs\tests\modules\1.0\relative\submodule\a.js" />
+    <Content Include="commonjs\tests\modules\1.0\relative\submodule\b.js" />
+    <Content Include="commonjs\tests\modules\1.0\relative\test.js" />
+    <Content Include="commonjs\tests\modules\1.0\transitive\a.js" />
+    <Content Include="commonjs\tests\modules\1.0\transitive\b.js" />
+    <Content Include="commonjs\tests\modules\1.0\transitive\c.js" />
+    <Content Include="commonjs\tests\modules\1.0\transitive\program.js" />
+    <Content Include="commonjs\tests\modules\1.0\transitive\test.js" />
+    <Content Include="commonjs\tests\unit-testing\1.0\program.js" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
