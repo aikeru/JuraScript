@@ -1,0 +1,81 @@
+<div class="wikidoc">
+<p><strong>JuraScript Documentation</strong></p>
+<p>Last Updated 07/01/2013</p>
+<p><strong>1. Introduction<br>
+2. Installation<br>
+3. Using ActiveXObject<br>
+4. Legacy WSH Support<br>
+5. 'require' and 'exports' support<br>
+<br>
+</strong></p>
+<h3><strong>1. Introduction</strong></h3>
+<p>&nbsp;JuraScript's goal is to bring the flexibility of the JavaScript language, the power of the .NET framework and backwards compatibility with Active Scripting together in an easily deployable package. JuraScript targets system administrators, web developers
+ and end-users through compatibility with the Windows Script Host, Classic ASP, a powerful JavaScript console and scripting runtime and possibly in the future ASP.net Web Forms and ASP.net MVC.</p>
+<p>JuraScript accomplishes this by harnessing the Jurassic JavaScript project which is a correct, complete, performant, well-tested implementation of ECMAScript.<br>
+<br>
+Eventually, WSH JScript scripts should be able to take advantage of JuraScript by simply renaming the file extension to .JUR.&nbsp;Classic ASP pages should be able to do the same by simply changing their language declaration.<strong>&nbsp;</strong></p>
+<h3><strong>2. Installation</strong></h3>
+<p>There are two ways to install JuraScript. You can use nuget to add JuraScript to an existing project, or you can use the MSI to install JuraScript on your system.</p>
+<p>Installing the MSI ...<br>
+- Associates the .JUR extension with JuraScript. You can double-click .JUR files to execute them.<br>
+- Adds a JuraScript program folder with a &quot;JuraScript Console&quot; shortcut for an interactive mode.<br>
+- Adds .JUR to PATHEXT for co<span style="font-size:10pt">mmand-line execution of .JUR files (run them like you would .BAT or .JS)<br>
+</span><span style="font-size:10pt">&nbsp;</span></p>
+<h3><strong>3. Using ActiveXObject</strong></h3>
+<p>JuraScript scripts can use the ActiveXObject constructor with the same syntax and objects used in WSH or JScript scripts. This can be used to access or automate Microsoft Office products like Excel and Outlook, Internet Explorer, Windows Management Instrumentation
+ (WMI), the FileSystemObject and RegExp &nbsp;objects and many more through COM. JuraScript adds support for Enumerators such as in the case of accessing the FileSystemObject.Drives property.</p>
+<h3><strong>4. Legacy WSH support</strong></h3>
+<p>JuraScript provides a WScript object for legacy script support and compatibility.<br>
+The WScript object that JuraScript provides currently supports the following:<br>
+<br>
+</p>
+<div style="color:black; background-color:white">
+<pre>WScript.Quit();
+WScript.Quit(<span style="color:blue">int</span> errCode);
+WScript.Echo(object txt);
+WScript.Version; <span style="color:green">// Returns &quot;0&quot;</span>
+WScript.BuildVersion; <span style="color:green">//Returns &quot;&quot;</span>
+WScript.FullName; <span style="color:green">//Returns Assembly.GetEntryAssembly().FullName;</span>
+WScript.Interactive; <span style="color:green">//Returns true</span>
+WScript.Name; <span style="color:green">//Returns &quot;Jurassic Script Host&quot;</span>
+WScript.Path; <span style="color:green">//Returns Assembly.GetExecutingAssembly().Location;</span>
+WScript.ScriptFullName;
+WScript.ScriptName;
+WScript.Sleep(<span style="color:blue">int</span> time); <span style="color:green">//Sleep in milliseconds</span>
+WScript.CreateObject(string progId); <span style="color:green">//Other overloads are not supported.</span>
+WScript.StdError; <span style="color:green">//Property exists, but has no functionality</span>
+WScript.StdOut; <span style="color:green">//Property exists, but has no functionality</span>
+WScript.StdIn.Read();
+WScript.StdIn.Read(<span style="color:blue">int</span> characters);
+WScript.StdIn.ReadLine();
+WScript.StdIn.Skip(<span style="color:blue">int</span> characters);
+WScript.StdIn.SkipLine();
+</pre>
+</div>
+<h3><strong>4. 'require' and 'exports' support</strong></h3>
+<p>JuraScript offers simple support for the require() function and the exports object.<br>
+To offer functionality to other scripts, assign properties and functions to the global exports object.<br>
+<span style="font-size:10pt"><br>
+</p>
+<div style="color:black; background-color:white">
+<pre>exports.sayHello = <span style="color:blue">function</span>() { <span style="color:blue">return</span> <span style="color:#a31515">&quot;Hello from my module.&quot;</span>; };
+</pre>
+</div>
+<br>
+<br>
+To consume the functionality offered from another script, use the global &quot;require()&quot; function:<br>
+<br>
+<div style="color:black; background-color:white">
+<pre>var myModule = require(<span style="color:#a31515">&quot;myModule.jur&quot;</span>); <span style="color:green">//Load a script file</span>
+var assertModule = require(<span style="color:#a31515">&quot;assert&quot;</span>); <span style="color:green">//Load built-in module 'assert' - which is a Work-In-Progress</span>
+</pre>
+</div>
+</span><span style="font-size:10pt">&nbsp;</span>
+<p></p>
+<p><span style="font-size:10pt"><br>
+When calling require, the following behavior occurs:<br>
+JuraScript tests if any built-in module matches the string passed to 'require()'. &nbsp;These are presently stored as resources within the JuraScriptObject.dll library. If none match, JuraScript tests for the existence of a file matching the string passed to
+ require() that ends with &quot;.jur&quot;. In other words, passing &quot;mymodule.jur&quot; and &quot;mymodule&quot; are equivalent as JuraScript will search for &quot;mymodule.jur&quot; in both cases.&nbsp;</span></p>
+<p><span style="font-size:10pt"><br>
+</span></p>
+</div><div class="ClearBoth"></div>
